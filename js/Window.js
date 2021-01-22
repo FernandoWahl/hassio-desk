@@ -44,7 +44,7 @@ class Window extends BrowserWindow {
 
     super({ ...defaultProps, ...windowSettings })
     this.uuid = id;
-    this.loadURL(url, { extraHeaders: 'pragma: no-cache\n' })
+    this.loadURL(url)
     this.once('ready-to-show', () => {
       this.show()
     })
@@ -79,7 +79,6 @@ class Window extends BrowserWindow {
   set id(id) {
     this.uuid = id
   }
-
 
 }
 

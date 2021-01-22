@@ -1,6 +1,4 @@
 const bonjour = require("bonjour")()
-const http = require("http")
-
 let discoveryFound = []
 
 exports.find = function (callback) {
