@@ -4,22 +4,40 @@
   "description": "Home Assistant desktop app",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "productName": "HassIO Desk",
+    "asar": false,
+    "appId": "com.electron.homeassistant",
+    "mac": {
+      "category": "public.app-category.lifestyle",
+      "target": "dmg",
+      "icon": "home_assistant_logo.icns",
+      "darkModeSupport": true,
+      "extendInfo": "info.plist",
+      "extraDistFiles": "images",
+      "type": "distribution"
+    }
   },
   "author": "FernandoWahl",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
-    "devtron": "^1.4.0",
     "@mdi/svg": "^5.8.55",
-    "standard": "^12.0.1"
+    "devtron": "^1.4.0",
+    "electron-builder": "^22.9.1",
+    "standard": "^12.0.1",
+    "electron": "^3.0.4"
   },
   "dependencies": {
     "app-root-path": "^3.0.0",
     "bonjour": "^3.5.0",
-    "electron": "^3.0.4",
     "electron-reload": "^1.2.5",
     "electron-store": "^2.0.0",
     "uuid": "^8.3.2",
-    "ws": "^7.4.2"
+    "ws": "^7.4.2",
+    "lodash": "^4.0.0",
+    "prettier": "^2.0.5"
   }
 }
