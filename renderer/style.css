@@ -1,0 +1,27 @@
+body {
+  font-family: Roboto, sans-serif;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-weight: 400;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #111;
+  color: #e1e1e1;
+  --primary-text-color: #e1e1e1;
+  --secondary-text-color: #9b9b9b
+}
+
+.content {
+  padding: 30px 16px;
+  max-width: 360px;
+  margin: 0 auto
+}
+
+.header {
+  font-size: 1.96em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 300
+}

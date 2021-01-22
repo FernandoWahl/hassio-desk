@@ -1,0 +1,24 @@
+{
+  "name": "hassio-desk",
+  "version": "1.0.0",
+  "description": "Home Assistant desktop app",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "FernandoWahl",
+  "license": "ISC",
+  "devDependencies": {
+    "devtron": "^1.4.0",
+    "@mdi/svg": "^5.8.55",
+    "standard": "^12.0.1"
+  },
+  "dependencies": {
+    "electron": "^3.0.4",
+    "electron-reload": "^1.2.5",
+    "electron-store": "^2.0.0",
+    "app-root-path": "^3.0.0",
+    "bonjour": "^3.5.0",
+    "uuid": "^8.3.2"
+  }
+}

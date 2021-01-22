@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,viewport-fit=cover">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
+    <title>Home Assistant</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="content">
+      <div class="header"><img src="./images/favicon-192x192.png" alt="Home Assistant" height="52">Home Assistant</div>
+      <div class="hosts"><br>
+        <h4>List of found domains:</h4>
+        <div class="btn-group-vertical" role="group" style="width:100%" id="urlList">
+          <button class="btn btn-secondary" type="button" disabled>There are no values found in your wifi</button>
+        </div>
+        <br><br>
+        <h4>List of found domains:</h4>
+        <div class="input-group mb-3">
+          <input class="form-control" type="text" placeholder="Your Domain" id="customUrlText">
+          <button class="btn btn-secondary" type="button" id="customUrl">Go Custom</button>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="./index.js"></script>
+  </body>
+</html>
