@@ -5,7 +5,6 @@ var appRoot = require('app-root-path');
 const { v4: uuid } = require("uuid")
 
 const DataStore = require('./DataStore')
-const hassioInject = require('./HassioInject')
 
 const store = new DataStore({
 	name: 'HassioDesk'
@@ -48,17 +47,12 @@ class Window extends BrowserWindow {
     this.once('ready-to-show', () => {
       this.show()
     })
-    this.firstDomReady = false
     this.webContents.on("dom-ready", () => {
-      this.firstDomReady = true
       store.setWindow(id, this.webContents.getURL(), this.getBounds());
-      hassioInject.dragInjector(this)
     })
   
     this.webContents.on("did-navigate-in-page", () => {
-      this.firstDomReady = true
       store.setWindow(id, this.webContents.getURL(), this.getBounds());
-      hassioInject.dragInjector(this);
     })
   }
 

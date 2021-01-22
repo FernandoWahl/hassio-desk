@@ -20,31 +20,36 @@ const webSocket = require("./webSocket");
 let hostsData = []
 let mainWindow = null
 let panelsData = {}
-let servicesData = {}
-let statesData = []
-let themesData = {}
-let currentTheme = null
 
 function buildHelpMenu() {
 	const helpMenu = new Menu()
 	helpMenu.append(
 		new MenuItem({
+			label: "Open DevTools",
+			click: (menuItem, browserWindow, event) => {
+				browserWindow.webContents.openDevTools()
+			},
+		})
+	);
+	helpMenu.append(
+		new MenuItem({
 			role: 'reload',
-			accelerator: 'CmdOrCtrl+Y',
-			icon: mdi.path("mdi:reload")
+			accelerator: 'CmdOrCtrl+Y'
 		})
 	)
 	helpMenu.append(
 		new MenuItem({
-			role: 'togglefullscreen',
-			icon: mdi.path("mdi:fullscreen")
+			role: 'togglefullscreen'
 		})
 	)
 
+	helpMenu.append(new MenuItem({
+		type: "separator"
+	}))
+
 	helpMenu.append(
 		new MenuItem({
-			role: "about",
-			icon: mdi.path("mdi:information-outline")
+			role: "about"
 		})
 	)
 
@@ -107,8 +112,7 @@ function buildAppMenu() {
 				const urlMenu = new URL(browserWindow.webContents.getURL())
 				urlMenu.pathname = "/developer-tools/info"
 				browserWindow.loadURL(urlMenu.toString())
-			},
-			icon: mdi.path("mdi:hammer")
+			}
 		})
 	)
 	appMenu.append(
@@ -118,8 +122,7 @@ function buildAppMenu() {
 				const urlMenu = new URL(browserWindow.webContents.getURL())
 				urlMenu.pathname = "/developer-tools/event"
 				browserWindow.loadURL(urlMenu.toString())
-			},
-			icon: mdi.path("mdi:bug")
+			}
 		})
 	)
 	appMenu.append(
@@ -143,8 +146,7 @@ function buildAppMenu() {
 					}
 				})
 
-			},
-			icon: mdi.path("mdi:restart")
+			}
 		})
 	)
 	appMenu.append(new MenuItem({
@@ -158,9 +160,6 @@ function buildAppMenu() {
 				mainWindow.loadURL(url)
 			},
 		}
-		if (url.startsWith("https://")) {
-			settings.icon = mdi.path("mdi:lock")
-		}
 		appMenu.append(new MenuItem(settings))
 	}
 	appMenu.append(
@@ -171,8 +170,7 @@ function buildAppMenu() {
 
 	appMenu.append(
 		new MenuItem({
-			role: "quit",
-			icon: mdi.path("mdi:exit-to-app")
+			role: "quit"
 		})
 	)
 
@@ -209,10 +207,10 @@ function buildDashboardsMenu() {
 					},
 				}
 				if (item.icon && item.icon.startsWith("mdi:")) {
-					tbSettings.icon = settings.icon = mdi.path(item.icon)
+					tbSettings.icon = mdi.path(item.icon)
 					tbSettings.iconPosition = "left"
 				} else if (id == "lovelace") {
-					tbSettings.icon = settings.icon = mdi.path("mdi:view-dashboard")
+					tbSettings.icon = mdi.path("mdi:view-dashboard")
 					tbSettings.iconPosition = "left"
 				}
 				touchbarItems.push(new TouchBarButton(tbSettings))
@@ -228,7 +226,6 @@ function buildDashboardsMenu() {
 		panels.append(
 			new MenuItem({
 				label: "Edit Dashbords",
-				icon: mdi.path("mdi:pencil"),
 				click: (menuItem, browserWindow, event) => {
 					let url = new URL(browserWindow.webContents.getURL())
 					url.pathname = "/config/lovelace/dashboards"
@@ -242,12 +239,12 @@ function buildDashboardsMenu() {
 			submenu: panels,
 		})
 
-		  if (mainWindow) {
-		  	const touchbar = new TouchBar({
-		  		items: touchbarItems,
-		  	})
-		  	mainWindow.setTouchBar(touchbar)
-		  }
+		if (mainWindow) {
+			const touchbar = new TouchBar({
+				items: touchbarItems,
+			})
+			mainWindow.setTouchBar(touchbar)
+		}
 		return panelsItem
 	}
 }
@@ -260,7 +257,7 @@ function _rebuildMenu() {
 	if (menuPanel) {
 		top.append(menuPanel)
 	}
-	//top.append(buildEditMenu())
+	top.append(buildEditMenu())
 	top.append(buildHelpMenu())
 
 	console.log("Menu Rebuild Done")

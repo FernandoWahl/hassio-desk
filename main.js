@@ -23,9 +23,6 @@ function main() {
 	
 	mainWindow.once('show', () => {
 		menu.hosts(mainWindow);
-		// webSocket.panels(mainWindow, (data) => {
-		// 	console.log(data)
-		// })
 	});
 	mainWindow.on("move", () => mainWindow.saveSize())
 	mainWindow.on("resize", () => mainWindow.saveSize())
