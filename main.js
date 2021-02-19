@@ -3,35 +3,41 @@
 const path = require('path')
 const {
 	app,
-	ipcMain
+	ipcMain,
+	dialog
 } = require('electron')
-const menu = require("./js/Menu")
-
-var appRoot = require('app-root-path');
-require('electron-reload')(__dirname)
-
-const Discovery = require('./js/Discovery')
 const Window = require('./js/Window')
+const appRoot = require('app-root-path');
+const DataStore = require('./js/DataStore')
 
-const webSocket = require("./js/webSocket");
+const store = new DataStore({
+	name: 'HassIO-DB'
+})
 
-function main() {
-	let url = `file://${appRoot}/${path.join('renderer', 'index.html')}`
+app.on('ready', () => {
 	let mainWindow = new Window({
-		url: url
+		uri: `file://${appRoot}/${path.join('renderer', 'index.html')}`
 	})
-	
-	mainWindow.once('show', () => {
-		menu.hosts(mainWindow);
-	});
 	mainWindow.on("move", () => mainWindow.saveSize())
 	mainWindow.on("resize", () => mainWindow.saveSize())
 
-	ipcMain.on('login-to', (event, url) => {
-		mainWindow.loadURL(url)
-		menu.hosts(mainWindow)
+	ipcMain.on('login-to', (event, url) => mainWindow.loadURL(url))
+	ipcMain.on('reset-app', (event) => {
+		let options = {
+			buttons: ["Yes", "No"],
+			message: "Do you really want to reset the app?"
+		}
+		dialog.showMessageBox(options, (response, checkboxChecked) => {
+			if (response == 0) {
+				mainWindow.webContents.session.clearStorageData([], function (data) {
+					console.log(data);
+					store.delAllWindow();
+					setTimeout(() => {
+						app.quit();
+					}, 100);
+				})
+			}
+		})
 	})
-}
-
-app.on('ready', main)
+})
 app.on('window-all-closed', () => app.quit())
