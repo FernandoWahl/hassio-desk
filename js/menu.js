@@ -1,21 +1,27 @@
 const {
+	app,
+	dialog,
 	Menu,
 	MenuItem,
-	dialog,
 	Notification,
-	TouchBar
+	TouchBar,
+	BrowserWindow
 } = require("electron")
 const {
 	TouchBarButton,
 	TouchBarLabel
 } = TouchBar
-const Discovery = require("./Discovery")
-const mdi = require("./mdi")
 const {
 	URL
 } = require("url")
+
+
+const path = require('path')
 const lodash = require("lodash")
+const Discovery = require("./Discovery")
+const mdi = require("./mdi")
 const webSocket = require("./webSocket");
+const appRoot = require('app-root-path');
 
 let hostsData = []
 let mainWindow = null
@@ -102,56 +108,58 @@ function buildEditMenu() {
 
 function buildAppMenu() {
 	const appMenu = new Menu()
-	appMenu.append(new MenuItem({
-		type: "separator"
-	}))
-	appMenu.append(
-		new MenuItem({
-			label: "Developer Tools Info",
-			click: (menuItem, browserWindow, event) => {
-				const urlMenu = new URL(browserWindow.webContents.getURL())
-				urlMenu.pathname = "/developer-tools/info"
-				browserWindow.loadURL(urlMenu.toString())
-			}
-		})
-	)
-	appMenu.append(
-		new MenuItem({
-			label: "Debug events fire/listen...",
-			click: (menuItem, browserWindow, event) => {
-				const urlMenu = new URL(browserWindow.webContents.getURL())
-				urlMenu.pathname = "/developer-tools/event"
-				browserWindow.loadURL(urlMenu.toString())
-			}
-		})
-	)
-	appMenu.append(
-		new MenuItem({
-			label: "Restart server",
-			click: (menuItem, browserWindow, event) => {
-				let options = {
-					buttons: ["Yes", "No"],
-					message: "Do you really want to restart the server?"
+	if (Object.keys(panelsData).length > 0) {
+		appMenu.append(new MenuItem({
+			type: "separator"
+		}))
+		appMenu.append(
+			new MenuItem({
+				label: "Developer Tools Info",
+				click: (menuItem, browserWindow, event) => {
+					const urlMenu = new URL(browserWindow.webContents.getURL())
+					urlMenu.pathname = "/developer-tools/info"
+					browserWindow.loadURL(urlMenu.toString())
 				}
-				dialog.showMessageBox(options, (response, checkboxChecked) => {
-					if (response == 0) {
-						webSocket.serverRestart(mainWindow, (data) => {
-							const notification = {
-								title: 'Hassio Desk',
-								body: 'Server restarted, Wait a moment!'
-							}
-							new Notification(notification).show()
-							console.log("SERVER RESTART", data)
-						})
+			})
+		)
+		appMenu.append(
+			new MenuItem({
+				label: "Debug events fire/listen...",
+				click: (menuItem, browserWindow, event) => {
+					const urlMenu = new URL(browserWindow.webContents.getURL())
+					urlMenu.pathname = "/developer-tools/event"
+					browserWindow.loadURL(urlMenu.toString())
+				}
+			})
+		)
+		appMenu.append(
+			new MenuItem({
+				label: "Restart server",
+				click: (menuItem, browserWindow, event) => {
+					let options = {
+						buttons: ["Yes", "No"],
+						message: "Do you really want to restart the server?"
 					}
-				})
+					dialog.showMessageBox(options, (response, checkboxChecked) => {
+						if (response == 0) {
+							webSocket.serverRestart(mainWindow, (data) => {
+								const notification = {
+									title: 'Hassio Desk',
+									body: 'Server restarted, Wait a moment!'
+								}
+								new Notification(notification).show()
+								console.log("SERVER RESTART", data)
+							})
+						}
+					})
 
-			}
-		})
-	)
-	appMenu.append(new MenuItem({
-		type: "separator"
-	}))
+				}
+			})
+		)
+		appMenu.append(new MenuItem({
+			type: "separator"
+		}))
+	}
 
 	for (let url of hostsData) {
 		const settings = {
@@ -165,6 +173,24 @@ function buildAppMenu() {
 	appMenu.append(
 		new MenuItem({
 			type: "separator",
+		})
+	)
+
+	appMenu.append(
+		new MenuItem({
+			label: "Preferences",
+			click: (menuItem, browserWindow, event) => {
+				let configWindow = new BrowserWindow({
+					parent: browserWindow,
+					width: 400,
+					height: 500,
+					show: false
+				})
+				configWindow.loadURL(`file://${appRoot}/${path.join('renderer', 'config.html')}`);
+				configWindow.once("ready-to-show", () => {
+					configWindow.show();
+				});
+			}
 		})
 	)
 

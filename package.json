@@ -10,31 +10,33 @@
   "build": {
     "productName": "HassIO Desk",
     "asar": false,
-    "appId": "com.electron.homeassistant",
+    "appId": "com.electron.hassiodesk",
     "mac": {
       "category": "public.app-category.lifestyle",
       "target": "dmg",
-      "icon": "home_assistant_logo.icns",
+      "icon": "images/home_assistant_logo.icns",
       "darkModeSupport": true,
       "extendInfo": "info.plist",
       "extraDistFiles": "images",
       "type": "distribution"
     }
   },
+  "keywords": [
+    "Electron"
+  ],
   "author": "FernandoWahl",
   "license": "MIT",
   "devDependencies": {
     "@mdi/svg": "^5.8.55",
     "devtron": "^1.4.0",
+    "electron": "^11.2.3",
     "electron-builder": "^22.9.1",
-    "standard": "^12.0.1",
-    "electron": "^3.0.4"
+    "standard": "^16.0.3"
   },
   "dependencies": {
+    "electron-store": "^7.0.2",
     "app-root-path": "^3.0.0",
     "bonjour": "^3.5.0",
-    "electron-reload": "^1.2.5",
-    "electron-store": "^2.0.0",
     "uuid": "^8.3.2",
     "ws": "^7.4.2",
     "lodash": "^4.0.0",

@@ -15,11 +15,9 @@ function withToken(window, callback) {
 		}
 	}
 
-	const baseUrls = []
 	let p = Promise.resolve()
 	const contentUrl = new URL(window.webContents.getURL())
 	contentUrl.pathname = ""
-	baseUrls.push(contentUrl)
 	const wp = window.webContents.executeJavaScript(
 		'localStorage.getItem("hassTokens");',
 		true

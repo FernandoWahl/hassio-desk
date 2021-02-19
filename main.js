@@ -7,19 +7,40 @@ const {
 	dialog
 } = require('electron')
 const Window = require('./js/Window')
-const appRoot = require('app-root-path');
-const DataStore = require('./js/DataStore')
+const appRoot = require('app-root-path')
+const {
+	defatutStore
+} = require('./js/DataStore')
+const menu = require('./js/menu')
 
-const store = new DataStore({
-	name: 'HassIO-DB'
-})
+
+let save = function (window) {
+	defatutStore.setWindow(window.id, window.webContents.getURL(), window.getBounds())
+}
 
 app.on('ready', () => {
+	let id = null;
+	let uri = `file://${appRoot}/${path.join('renderer', 'index.html')}`;
+	let bounds = null;
+
+	const list = Object.entries(defatutStore.getWindows());
+	if (list.length > 0) {
+		[id, [uri, bounds]] = list[0];
+	}
 	let mainWindow = new Window({
-		uri: `file://${appRoot}/${path.join('renderer', 'index.html')}`
+		id: id,
+		uri: uri,
+		bounds: bounds,
+		store: defatutStore
 	})
-	mainWindow.on("move", () => mainWindow.saveSize())
-	mainWindow.on("resize", () => mainWindow.saveSize())
+
+	mainWindow.webContents.on("did-navigate-in-page", () => save(mainWindow))
+	mainWindow.on("move", () => save(mainWindow))
+	mainWindow.on("resize", () => save(mainWindow))
+	mainWindow.webContents.on("dom-ready", () => {
+		save(mainWindow)
+		menu.hosts(mainWindow)
+	})
 
 	ipcMain.on('login-to', (event, url) => mainWindow.loadURL(url))
 	ipcMain.on('reset-app', (event) => {
@@ -30,14 +51,14 @@ app.on('ready', () => {
 		dialog.showMessageBox(options, (response, checkboxChecked) => {
 			if (response == 0) {
 				mainWindow.webContents.session.clearStorageData([], function (data) {
-					console.log(data);
-					store.delAllWindow();
+					defatutStore.deleteAll()
 					setTimeout(() => {
-						app.quit();
-					}, 100);
+						app.quit()
+					}, 100)
 				})
 			}
 		})
 	})
 })
+
 app.on('window-all-closed', () => app.quit())
